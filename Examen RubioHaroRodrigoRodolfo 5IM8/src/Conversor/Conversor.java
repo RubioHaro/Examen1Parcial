@@ -1,4 +1,3 @@
-
 package Conversor;
 
 import java.awt.BorderLayout;
@@ -16,117 +15,116 @@ import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 /**
- * 
+ *
  * Interfaz para nuestra calculadora basica
- * 
- * @author:  Rodrigo 
- * @version:  1.0 
- * @date: 06-09-2015 
+ *
+ * @author: Rodrigo
+ * @version: 1.0
+ * @date: 06-09-2015
  */
 public class Conversor extends JFrame {
-	JTextField pantalla;
-	double resultado;
-	String operacion;
-	JPanel panelNumeros, panelOperaciones;
-	boolean nuevaOperacion = true;
-	public Conversor() {
-		super();
-		setSize(250, 300);
-		setTitle("Calculadora Simple");
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setResizable(false);
 
-		// Vamos a dibujar sobre el panel
-		JPanel panel = (JPanel) this.getContentPane();
-		panel.setLayout(new BorderLayout());
+    JTextField pantalla;
+    double resultado;
+    String operacion;
+    JPanel panelNumeros, panelOperaciones;
+    boolean nuevaOperacion = false;
 
-		pantalla = new JTextField("0", 20);
-		pantalla.setBorder(new EmptyBorder(4, 4, 4, 4));
-		pantalla.setFont(new Font("Arial", Font.BOLD, 25));
-		pantalla.setHorizontalAlignment(JTextField.RIGHT);
-		pantalla.setEditable(false);
-		pantalla.setBackground(Color.WHITE);
-		panel.add("North", pantalla);
-		panelNumeros = new JPanel();
-		panelNumeros.setLayout(new GridLayout(4, 3));
-		panelNumeros.setBorder(new EmptyBorder(4, 4, 4, 4));
-		for (int n = 9; n >= 0; n--) {
-			nuevoBotonNumerico("" + n);
-		}
+    public Conversor() {
+        super();
+        setSize(250, 300);
+        setTitle("Calculadora Simple");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
-		nuevoBotonNumerico(".");
-		panel.add("Center", panelNumeros);
+        // Vamos a dibujar sobre el panel
+        JPanel panel = (JPanel) this.getContentPane();
+        panel.setLayout(new BorderLayout());
 
-		panelOperaciones = new JPanel();
-		panelOperaciones.setLayout(new GridLayout(3, 1));
-		panelOperaciones.setBorder(new EmptyBorder(4, 4, 4, 4));
-		nuevoBotonOperacion("=");
-		nuevoBotonOperacion("CE");
-                nuevoBotonOperacion("Convertidor");                              
-		panel.add("East", panelOperaciones);
-		validate();
-	}
-	private void nuevoBotonNumerico(String digito) {
-		JButton btn = new JButton();
-		btn.setText(digito);
-		btn.addMouseListener(new MouseAdapter() {
+        pantalla = new JTextField("0", 20);
+        pantalla.setBorder(new EmptyBorder(4, 4, 4, 4));
+        pantalla.setFont(new Font("Arial", Font.BOLD, 25));
+        pantalla.setHorizontalAlignment(JTextField.RIGHT);
+        pantalla.setEditable(false);
+        pantalla.setBackground(Color.WHITE);
+        panel.add("North", pantalla);
+        panelNumeros = new JPanel();
+        panelNumeros.setLayout(new GridLayout(4, 3));
+        panelNumeros.setBorder(new EmptyBorder(4, 4, 4, 4));
+        for (int n = 9; n >= 0; n--) {
+            nuevoBotonNumerico("" + n);
+        }
 
-			@Override
-			public void mouseReleased(MouseEvent evt) {
-				JButton btn = (JButton) evt.getSource();
-				numeroPulsado(btn.getText());
-			}
-		});
+        nuevoBotonNumerico(".");
+        panel.add("Center", panelNumeros);
 
-		panelNumeros.add(btn);
-	}
-	private void nuevoBotonOperacion(String operacion) {
-		JButton btn = new JButton(operacion);
-		btn.setForeground(Color.RED);
+        panelOperaciones = new JPanel();
+        panelOperaciones.setLayout(new GridLayout(3, 1));
+        panelOperaciones.setBorder(new EmptyBorder(4, 4, 4, 4));
+        nuevoBotonOperacion("CE");
+        nuevoBotonOperacion("Convertidor");
+        panel.add("East", panelOperaciones);
+        validate();
+    }
 
-		btn.addMouseListener(new MouseAdapter() {
+    private void nuevoBotonNumerico(String digito) {
+        JButton btn = new JButton();
+        btn.setText(digito);
+        btn.addMouseListener(new MouseAdapter() {
 
-			@Override
-			public void mouseReleased(MouseEvent evt) {
-				JButton btn = (JButton) evt.getSource();
-				operacionPulsado(btn.getText());
-			}
-		});
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                JButton btn = (JButton) evt.getSource();
+                numeroPulsado(btn.getText());
+            }
+        });
 
-		panelOperaciones.add(btn);
-	}
-	private void numeroPulsado(String digito) {
-		if (pantalla.getText().equals("0") || nuevaOperacion) {
-			pantalla.setText(digito);
-		} else {
-			pantalla.setText(pantalla.getText() + digito);
-		}
-		nuevaOperacion = false;
-	}
-	private void operacionPulsado(String tecla) {
-		if (tecla.equals("=")) {
-			calcularResultado();
-		} else if (tecla.equals("CE")) {
-			resultado = 0;
-			pantalla.setText("");
-			nuevaOperacion = true;
-		} else {
-			operacion = tecla;
-			if ((resultado > 0) && !nuevaOperacion) {
-				calcularResultado();
-			} else {
-				resultado = new Double(pantalla.getText());
-			}
-		}
+        panelNumeros.add(btn);
+    }
 
-		nuevaOperacion = true;
-	}
+    private void nuevoBotonOperacion(String operacion) {
+        JButton btn = new JButton(operacion);
+        btn.setForeground(Color.blue);
 
-	private void calcularResultado() {
-		if (operacion.equals("Convertidor")) {
-			resultado = new Double(pantalla.getText()) * 20;
-		}      
-		pantalla.setText("" + resultado);
-		operacion = "";
-	}
+        btn.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                JButton btn = (JButton) evt.getSource();
+                operacionPulsado(btn.getText());
+            }
+        });
+
+        panelOperaciones.add(btn);
+    }
+
+    private void numeroPulsado(String digito) {
+        if (pantalla.getText().equals("0") || nuevaOperacion) {
+            pantalla.setText(digito);
+        } else {
+            pantalla.setText(pantalla.getText() + digito);
+        }
+        nuevaOperacion = false;
+    }
+
+    private void operacionPulsado(String tecla) {
+        if (tecla.equals("CE")) {
+            resultado = 0;
+            pantalla.setText("0");
+            nuevaOperacion = true;
+        } else {
+            operacion = tecla;
+            if (operacion.equals("Convertidor")) {
+                calcularResultado(); 
+            }
+
+        }
+        nuevaOperacion = true;
+    }
+
+    private void calcularResultado() {
+        resultado = new Double(pantalla.getText()) * 20;
+        pantalla.setText("" + resultado);
+        operacion = "";
+    }
 }
